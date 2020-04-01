@@ -1,2 +1,11 @@
 Atac:
 - A stie ca e destinat lui mesajul (criptat cu Ka), dar nu stie cine a initiat comunicarea cu el (i)
+
+A -> S: (A.B.{Na}_Ka)       % Ka is a key shared by A and S
+A <- S: (A.B.{K.Na.Ns}_Ka.  % S generates new key K
+             {K.Na.Ns}_Kb)  % A cannot decrypt the contents of {K.Na.Ns}_Kb
+                            % but he is able to forward that to B
+A -> B: (A.B.{K.Na.Ns}_Kb.
+             {Na.Ns}_K)     % The last part is% a key confirmation: B knows K
+A <- B: (A.B.{Ns.Na}_K)
+A -> B: (A.B.{Ns.Na+1}_K)
