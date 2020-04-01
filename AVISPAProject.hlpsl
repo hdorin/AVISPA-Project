@@ -4,7 +4,7 @@ role alice (A, S, B : agent,
 
 played_by A def=
     local State : nat,
-          Na,Ns,Nb : text,
+          Na,Nb : text,
           K     : symmetric_key,
           X     : {symmetric_key.text.text}_symmetric_key
     init State := 0
@@ -14,11 +14,11 @@ played_by A def=
        State':= 2 /\ Na' := new()
                   /\ SND_SA(A.B.{Na'}_Ka)
 
-    2. State  = 2 /\ RCV_SA(A.B.{K'.Na.Ns'.B}_Ka.X') =|>
-       State':= 4 /\ SND_BA(A.B.X'.{Na.Ns'}_K')
+    2. State  = 2 /\ RCV_SA(A.B.{K'.Na.B}_Ka.X') =|>
+       State':= 4 /\ SND_BA(A.B.X'.{Na}_K')
 
-    3. State  = 4 /\ RCV_BA(A.B.{Na.Ns.Nb'}_K) =|>
-       State':= 6 /\ SND_BA({Nb'.Ns}_K)
+    3. State  = 4 /\ RCV_BA(A.B.{Na.Nb'}_K) =|>
+       State':= 6 /\ SND_BA({Nb'}_K)
                   /\ request(A,B,alice_bob_na,Na) % A verifies that B knows K (B can decrpyt and encrypt again Na)
                   /\ witness(A,B,bob_alice_nb,Nb') 
 end role
@@ -30,14 +30,14 @@ role server (A, S, B  : agent,
 
 played_by S def=
     local State : nat,
-          Ns,Na : text,
+          Na    : text,
           K     : symmetric_key
     init  State := 1
 
     transition
     1. State  = 1 /\ RCV_AS(A.B.{Na'}_Ka) =|>
-       State':= 3 /\ Ns' := new() /\ K' := new()
-                  /\ SND_AS(A.B.{K'.Na'.Ns'.B}_Ka.{K'.Na'.Ns'.A}_Kb)
+       State':= 3 /\ K' := new()
+                  /\ SND_AS(A.B.{K'.Na'.B}_Ka.{K'.Na'.A}_Kb)
                   /\ secret(K',k,{A,B,S})
 end role
 
@@ -47,17 +47,17 @@ role bob (A, S, B : agent,
           SND_AB, RCV_AB : channel(dy))
 played_by B def=
      local State  : nat,
-           Ns,Na,Nb : text,
+           Na,Nb  : text,
            K      : symmetric_key
      init  State := 5
 
      transition
-     1. State  = 5 /\ RCV_AB(A.B.{K'.Na'.Ns'.A}_Kb.{Na'.Ns'}_K') =|>
+     1. State  = 5 /\ RCV_AB(A.B.{K'.Na'.A}_Kb.{Na'}_K') =|>
         State':= 7 /\ Nb' := new()
-                   /\ SND_AB(A.B.{Na'.Ns'.Nb'}_K')
+                   /\ SND_AB(A.B.{Na'.Nb'}_K')
                    /\ witness(B,A,alice_bob_na,Na')
                    
-     2. State  = 7 /\ RCV_AB({Nb.Ns}_K) =|>
+     2. State  = 7 /\ RCV_AB({Nb}_K) =|>
         State':= 9 /\ request(B,A,bob_alice_nb,Nb) % B verifies that A knows K (A can decrpyt and encrypt again Nb)
                    
 end role
