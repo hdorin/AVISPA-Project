@@ -16,6 +16,7 @@ played_by A def=
 
     2. State  = 2 /\ RCV_SA(A.B.{K'.Na.Ns'.B}_Ka.X') =|>
        State':= 4 /\ SND_BA(A.B.X'.{Na.Ns'}_K')
+                  /\ witness(A,B,bob_alice_na,Na)
 
     3. State  = 4 /\ RCV_BA(A.B.{Ns.Na}_K) =|>
        State':= 6 /\ request(A,B,alice_bob_na,Na)
@@ -53,6 +54,7 @@ played_by B def=
      1. State  = 5 /\ RCV_AB(A.B.{K'.Na'.Ns'.A}_Kb.{Na'.Ns'}_K') =|>
         State':= 7 /\ SND_AB(A.B.{Ns'.Na'}_K')
                    /\ witness(B,A,alice_bob_na,Na')
+                   /\ request(B,A,bob_alice_na,Na)
 end role
 
 
@@ -76,7 +78,7 @@ role environment()
 def=
       const a, b, s         : agent,
             ka, kb, ki      : symmetric_key,
-            alice_bob_na, k : protocol_id
+            alice_bob_na, bob_alice_na, k : protocol_id
 
       intruder_knowledge = {a, b, s, ki}
 
@@ -90,6 +92,7 @@ end role
 goal
     secrecy_of k
     authentication_on alice_bob_na
+    authentication_on bob_alice_na
 end goal
 
 environment()
