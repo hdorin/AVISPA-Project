@@ -18,7 +18,7 @@ played_by A def=
        State':= 4 /\ SND_BA(A.B.X'.{Na.Ns'}_K')
                   
 
-   4. State  = 4 /\ RCV_BA({Na.Nb'.Ns}_K) =|>
+   4. State  = 4 /\ RCV_BA({Ns.Na.Nb'}_K) =|>
       State':= 6 /\ SND_BA({Na.Nb'.Ns}_K)
                  /\ request(A,B,alice_bob_na,Na)
                  /\ witness(A,B,bob_alice_nb,Nb')
@@ -56,7 +56,7 @@ played_by B def=
      transition
      1. State  = 5 /\ RCV_AB(A.B.{K'.Na'.Ns'.A}_Kb.{Na'.Ns'}_K') =|>
         State':= 7 /\ Nb' := new()
-                   /\ SND_AB({Na'.Nb'.Ns'}_K')
+                   /\ SND_AB({Ns'.Na'.Nb'}_K')
                    /\ witness(B,A,alice_bob_na,Na')
 
                    
