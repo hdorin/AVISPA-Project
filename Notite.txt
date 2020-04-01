@@ -2,12 +2,18 @@ Atac:
 - A stie ca e destinat lui mesajul (criptat cu Ka), dar nu stie cine a initiat comunicarea cu el (i)
 
 A -> S: (A.B.{Na}_Ka)       % Ka is a key shared by A and S
-A <- S: (A.B.{K.Na.B}_Ka.  % S generates new key K (without .A in {}_Kb, the attacker would be able to contact the server for I and B, thus obtaining K as well as being able to pretend to be A)
-             {K.Na.A}_Kb)  % A cannot decrypt the contents of {K.Na.Ns}_Kb
+A <- S: ({K.Na.B}_Ka.  % S generates new key K (without .A in {}_Kb, the attacker would be able to contact the server for I and B, thus obtaining K as well as being able to pretend to be A)
+         {K.Na.A}_Kb)  % A cannot decrypt the contents of {K.Na.Ns}_Kb
                             % but he is able to forward that to B
-A -> B: (A.B.{K.Na.A}_Kb.  % The last part is
-             {Na}_K)     % a key confirmation
-A <- B: (A.B.{Na.Nb}_K)  $ A tests if B knows K during this session (Ns)
-A -> B: (A.B.{Nb}_K)  % B tests if A knows K during this session (Ns)
+A -> B: ({K.Na.A}_Kb.  % The last part is
+         {Na}_K)       % a key confirmation
+A <- B: ({Na.Nb}_K)  % A tests if B knows K during this session (Ns)
+A -> B: ({Nb}_K)  % B tests if A knows K during this session (Ns)
 
 * Am scos Ns pentru ca am cheia K, care e ca un nonce
+
+*De ce {symmetric_key.text.text}_symmetric_key incetineste executia?
+ex:
+   X     : {symmetric_key.text.text}_symmetric_key
+   ...
+   2. State  = 2 /\ RCV_SA(A.B.{K'.Na.B}_Ka.X') =|>
