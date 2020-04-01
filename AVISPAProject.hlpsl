@@ -6,16 +6,16 @@ played_by A def=
     local State : nat,
           Na,Nb : text,
           K     : symmetric_key,
-          Kb    : symmetric_key
+          X     : {symmetric_key.text.agent}_symmetric_key
     init State := 0
 
     transition
     1. State  = 0 /\ RCV_BA(start) =|>
        State':= 2 /\ Na' := new()
-                  /\ SND_SA(A.B.{Na'}_Ka)
+                  /\ SND_SA({A.B.Na'}_Ka)
 
-    2. State  = 2 /\ RCV_SA({K'.Na.B}_Ka.{K'.Na.A}_Kb') =|>
-       State':= 4 /\ SND_BA({K'.Na.A}_Kb'.{Na}_K')
+    2. State  = 2 /\ RCV_SA({K'.Na}_Ka.X') =|>
+       State':= 4 /\ SND_BA(X')
 
     3. State  = 4 /\ RCV_BA({Na.Nb'}_K) =|>
        State':= 6 /\ SND_BA({Nb'}_K)
@@ -35,9 +35,9 @@ played_by S def=
     init  State := 1
 
     transition
-    1. State  = 1 /\ RCV_AS(A.B.{Na'}_Ka) =|>
+    1. State  = 1 /\ RCV_AS({A.B.Na'}_Ka) =|>
        State':= 3 /\ K' := new()
-                  /\ SND_AS({K'.Na'.B}_Ka.{K'.Na'.A}_Kb)
+                  /\ SND_AS({K'.Na}_Ka.{K'.Na'.A}_Kb)
                   /\ secret(K',k,{A,B,S})
 end role
 
@@ -52,7 +52,7 @@ played_by B def=
      init  State := 5
 
      transition
-     1. State  = 5 /\ RCV_AB({K'.Na'.A}_Kb.{Na'}_K') =|>
+     1. State  = 5 /\ RCV_AB({K'.Na'.A}_Kb) =|>
         State':= 7 /\ Nb' := new()
                    /\ SND_AB({Na'.Nb'}_K')
                    /\ witness(B,A,alice_bob_na,Na')
