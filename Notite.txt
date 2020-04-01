@@ -9,3 +9,5 @@ A -> B: (A.B.{K.Na.A}_Kb.  % The last part is
              {Na}_K)     % a key confirmation
 A <- B: (A.B.{Na.Nb}_K)  $ A tests if B knows K during this session (Ns)
 A -> B: (A.B.{Nb}_K)  % B tests if A knows K during this session (Ns)
+
+* Am scos Ns pentru ca am cheia K, care e ca un nonce

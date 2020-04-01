@@ -6,7 +6,7 @@ played_by A def=
     local State : nat,
           Na,Nb : text,
           K     : symmetric_key,
-          X     : {symmetric_key.text.text}_symmetric_key
+          X     : {symmetric_key.text.agent}_symmetric_key
     init State := 0
 
     transition
