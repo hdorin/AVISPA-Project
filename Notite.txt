@@ -1,0 +1,2 @@
+Atac:
+- A stie ca e destinat lui mesajul (criptat cu Ka), dar nu stie cine a initiat comunicarea cu el (i)
