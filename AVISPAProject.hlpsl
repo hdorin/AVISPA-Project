@@ -1,3 +1,13 @@
+
+% A -> S: ({A.B.Na}_Ka)  % Ka is a key shared by A and S
+% A <- S: ({K.Na}_Ka.  % S generates new key K (if "A" is not encrypted with Kb, the attacker would contact the server for I and B, obtain K and be able to pretend to be A when contacting B)
+%                      % {K.Na}_Ka nu are nevoie de Na, dar il ajuta pe A sa identifice sesiunea
+%          {K.Na.A}_Kb)  % A cannot decrypt the contents of {K.Na.Ns}_Kb
+%                        % but he is able to forward this to B
+% A -> B: ({K.Na.A}_Kb)  % The last part is a key confirmation
+% A <- B: ({Na.Nb}_K)  % A tests if B knows K during this session, by using Na
+% A -> B: ({Nb}_K)  % B tests if A knows K during this session, by using Nb
+
 role alice (A, S, B : agent,
 	    Ka      : symmetric_key,
 	    SND_SA, RCV_SA, SND_BA, RCV_BA : channel(dy))
@@ -18,7 +28,7 @@ played_by A def=
        State':= 4 /\ SND_BA(X')
 
     3. State  = 4 /\ RCV_BA({Na.Nb'}_K) =|>
-       State':= 6 /\ SND_BA({Nb'}_K)
+       State':= 6 /\ SND_BA({Nb'.Na}_K)
                   /\ request(A,B,alice_bob_na,Na) % A verifies that B knows K (B can decrpyt and encrypt again Na)
                   /\ witness(A,B,bob_alice_nb,Nb') 
 end role
@@ -37,7 +47,7 @@ played_by S def=
     transition
     1. State  = 1 /\ RCV_AS({A.B.Na'}_Ka) =|>
        State':= 3 /\ K' := new()
-                  /\ SND_AS({K'.Na}_Ka.{K'.Na'.A}_Kb)
+                  /\ SND_AS({K'.Na'}_Ka.{K'.Na'.A}_Kb)
                   /\ secret(K',k,{A,B,S})
 end role
 
@@ -45,6 +55,7 @@ end role
 role bob (A, S, B : agent,
           Kb      : symmetric_key,
           SND_AB, RCV_AB : channel(dy))
+
 played_by B def=
      local State  : nat,
            Na,Nb  : text,
@@ -57,7 +68,7 @@ played_by B def=
                    /\ SND_AB({Na'.Nb'}_K')
                    /\ witness(B,A,alice_bob_na,Na')
                    
-     2. State  = 7 /\ RCV_AB({Nb}_K) =|>
+     2. State  = 7 /\ RCV_AB({Nb.Na}_K) =|>
         State':= 9 /\ request(B,A,bob_alice_nb,Nb) % B verifies that A knows K (A can decrpyt and encrypt again Nb)
                    
 end role

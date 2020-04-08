@@ -2,16 +2,16 @@ Atac:
 - A stie ca e destinat lui mesajul (criptat cu Ka), dar nu stie cine a initiat comunicarea cu el (i)
 
 A -> S: ({A.B.Na}_Ka)       % Ka is a key shared by A and S
-A <- S: ({K.Na}_Ka.  % S generates new key K (without .A in {}_Kb, the attacker would be able to contact the server for I and B, thus obtaining K as well as being able to pretend to be A)
+A <- S: ({K.Na}_Ka.  % S generates new key K (without ".A" in {}_Kb, the attacker would be able to contact the server for I and B, thus obtaining K as well as being able to pretend to be A)
+                     % {K.Na}_Ka nu are nevoie de Na, dar il ajuta pe A sa identifice sesiunea
          {K.Na.A}_Kb)  % A cannot decrypt the contents of {K.Na.Ns}_Kb
-                            % but he is able to forward that to B
+                       % but he is able to forward this to B
 A -> B: ({K.Na.A}_Kb)  % The last part is a key confirmation
 
-A <- B: ({Na.Nb}_K)  % A tests if B knows K during this session (Ns)
-A -> B: ({Nb}_K)  % B tests if A knows K during this session (Ns)
+A <- B: ({Na.Nb}_K)  % A tests if B knows K during this session, by using Na
+A -> B: ({Nb}_K)  % B tests if A knows K during this session, by using Nb
 
 % Am scos Ns pentru ca am cheia K, care e ca un nonce + am si Na
-% A <- S: ({K.Na}_Ka.{K.Na.A}_Kb) -> {K.Na}_Ka nu are nevoie de Na, dar il ajuta pe A sa identifice sesiunea
 
 
 *De ce {symmetric_key.text.text}_symmetric_key incetineste executia?
