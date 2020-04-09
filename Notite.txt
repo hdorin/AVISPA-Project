@@ -9,7 +9,7 @@ A <- S: ({K.Na}_Ka.  % S generates new key K (without ".A" in {}_Kb, the attacke
 A -> B: ({K.Na.A}_Kb)  % The last part is a key confirmation
 
 A <- B: ({Na.Nb}_K)  % A tests if B knows K during this session, by using Na
-A -> B: ({Nb}_K)  % B tests if A knows K during this session, by using Nb
+A -> B: ({Nb.Na}_K)  % B tests if A knows K during this session, by using Nb
 
 % Am scos Ns pentru ca am cheia K, care e ca un nonce + am si Na
 

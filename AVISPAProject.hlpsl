@@ -1,12 +1,12 @@
-
 % A -> S: ({A.B.Na}_Ka)  % Ka is a key shared by A and S
-% A <- S: ({K.Na}_Ka.  % S generates new key K (if "A" is not encrypted with Kb, the attacker would contact the server for I and B, obtain K and be able to pretend to be A when contacting B)
-%                      % {K.Na}_Ka nu are nevoie de Na, dar il ajuta pe A sa identifice sesiunea
-%          {K.Na.A}_Kb)  % A cannot decrypt the contents of {K.Na.Ns}_Kb
-%                        % but he is able to forward this to B
+% A <- S: ({K.Na}_Ka.  % S generates new key K 
+%                      % {K.Na}_Ka does not need Na, but it helps A identify the session for the key K
+%          {K.Na.A}_Kb)  % A cannot decrypt the contents of {K.Na.Ns}_Kb, but is able to forward it to B
+%                        % if A is not encrypted with Kb, the attacker will be able to pretend to be A when contacting B
 % A -> B: ({K.Na.A}_Kb)  % The last part is a key confirmation
 % A <- B: ({Na.Nb}_K)  % A tests if B knows K during this session, by using Na
-% A -> B: ({Nb}_K)  % B tests if A knows K during this session, by using Nb
+% A -> B: ({Nb.Na}_K)  % B tests if A knows K during this session, by using Nb
+%                      % Na is not necessary, but it helps B identify the session when receiving Nb
 
 role alice (A, S, B : agent,
 	    Ka      : symmetric_key,
